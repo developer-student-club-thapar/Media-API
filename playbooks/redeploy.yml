@@ -1,0 +1,48 @@
+---
+    - hosts: prod
+      tasks:
+        - name: Check Media-API cloned
+          stat:
+            path: /home/{{ lookup('env','USER') }}/Media-API
+          register: media_api_cloned
+        
+        - name: Check if Media-API cloned
+          when: not media_api_cloned.stat.exists
+          fail: "Media-API not cloned, Please run automated setup"
+        
+        - name: Check if cert.pem is copied
+          stat:
+            path: /home/{{ lookup('env','USER') }}/Media-API/api/cert.pem
+          register: ssl_cert_copied
+        
+        - name: Check if cert.pem is copied
+          when: not ssl_cert_copied.stat.exists
+          fail: "cert.pem not copied, Please check instructions"
+        
+        - name: Check if privkey.pem is copied
+          stat:
+            path: /home/{{ lookup('env','USER') }}/Media-API/api/privkey.pem
+          register: ssl_key_copied
+        
+        - name: Check if privkey.pem is copied
+          when: not ssl_key_copied.stat.exists
+          fail: "privkey.pem not copied, Please check instructions"
+        
+        - name: Check if nginx config file exists
+          stat:
+            path: /etc/nginx/sites-enabled/{{ lookup('env','MEDIA_API_DOMAIN') }}
+          register: nginx_config_exists
+        
+        - name: Check if nginx config file exists
+          when: not nginx_config_exists.stat.exists
+          fail: "Nginx config file not copied, Please check instructions"
+        
+        - name: Pull repo
+          shell: |
+            cd /home/{{ lookup('env','USER') }}/Media-API
+            git pull
+        
+        - name: Redeploy container
+          shell: |
+            cd /home/{{ lookup('env','USER') }}/Media-API
+            docker-compose up --build -d
