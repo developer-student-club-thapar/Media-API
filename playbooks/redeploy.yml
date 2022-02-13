@@ -39,4 +39,5 @@
         - name: Recontainerise
           shell: |
             cd /home/{{ lookup('env','USER') }}/Media-API
+            docker-compose down
             docker-compose up --build -d
