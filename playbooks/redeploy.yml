@@ -5,44 +5,38 @@
           stat:
             path: /home/{{ lookup('env','USER') }}/Media-API
           register: media_api_cloned
-        
-        - name: Check if Media-API cloned
+
+        - name: Check if Media-API is cloned
           when: not media_api_cloned.stat.exists
-          fail: "Media-API not cloned, Please run automated setup"
+          fail:
+            msg: Media-API is not cloned. Please clone it first.
         
-        - name: Check if cert.pem is copied
+        - name: Check if cert.pem copied
           stat:
             path: /home/{{ lookup('env','USER') }}/Media-API/api/cert.pem
-          register: ssl_cert_copied
+          register: cert_pem_copied
         
-        - name: Check if cert.pem is copied
-          when: not ssl_cert_copied.stat.exists
-          fail: "cert.pem not copied, Please check instructions"
-        
-        - name: Check if privkey.pem is copied
+        - name: Check if key.pem copied
           stat:
             path: /home/{{ lookup('env','USER') }}/Media-API/api/privkey.pem
-          register: ssl_key_copied
+          register: key_pem_copied
         
-        - name: Check if privkey.pem is copied
-          when: not ssl_key_copied.stat.exists
-          fail: "privkey.pem not copied, Please check instructions"
+        - name: Check if cert.pem and key.pem are copied
+          when: not cert_pem_copied.stat.exists or not key_pem_copied.stat.exists
+          fail:
+            msg: cert.pem and key.pem are not copied. Please copy them first.
         
-        - name: Check if nginx config file exists
+        - name: check nginx
           stat:
             path: /etc/nginx/sites-enabled/{{ lookup('env','MEDIA_API_DOMAIN') }}
-          register: nginx_config_exists
+          register: nginx_enabled
         
-        - name: Check if nginx config file exists
-          when: not nginx_config_exists.stat.exists
-          fail: "Nginx config file not copied, Please check instructions"
-        
-        - name: Pull repo
-          shell: |
-            cd /home/{{ lookup('env','USER') }}/Media-API
-            git pull
-        
-        - name: Redeploy container
+        - name: check nginx
+          when: not nginx_enabled.stat.exists
+          fail:
+            msg: nginx is not enabled. Please enable it first.
+          
+        - name: Recontainerise
           shell: |
             cd /home/{{ lookup('env','USER') }}/Media-API
             docker-compose up --build -d
