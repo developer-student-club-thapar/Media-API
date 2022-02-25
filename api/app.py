@@ -5,7 +5,10 @@ from database import SessionLocal, engine
 from getAllFiles import *
 from werkzeug.utils import secure_filename
 from security import *
+from flask_cors import CORS, cross_origin
+
 app = Flask(__name__)
+CORS(app)
 
 parent = "assets"
 
