@@ -35,6 +35,10 @@
           when: not nginx_enabled.stat.exists
           fail:
             msg: nginx is not enabled. Please enable it first.
+        
+        - name: git pull
+          shell: |
+            git pull
           
         - name: Recontainerise
           shell: |
