@@ -38,6 +38,7 @@
         
         - name: git pull
           shell: |
+            cd Media-API/
             git pull
           
         - name: Recontainerise
