@@ -9,17 +9,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Set time 
+      id: time
+      uses: Kaven-Universe/github-action-current-date-time@v1.1.0
+      with:
+        format: "YYYY_MM_DD HH_mm_ss_SSS"
     - uses: actions/checkout@v3
-    - name: Set date as tag name
-      env:
-        DATE: $(date +%Y-%m-%d-%H-%M-%S)
-      run: echo $DATE  
-    - name: Login to Dockerhub
-      env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}\
-      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
-    - name: Build the Docker Image
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/media-api:$(date +%s)
-    - name: Push to Docker Hub
-      run: docker push ${{secrets.DOCKER_USER}}/media-api:$(date +%Y-%m%-d%-%H)
+    - name: Print time
+      run: echo ${{ steps.t1.outputs.time }}
+#     - name: Login to Dockerhub
+#       env:
+#         DOCKER_USER: ${{secrets.DOCKER_USER}}
+#         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}\
+#       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+#     - name: Build the Docker Image
+#       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/media-api:$(date +%s)
+#     - name: Push to Docker Hub
+#       run: docker push ${{secrets.DOCKER_USER}}/media-api:$(date +%Y-%m%-d%-%H)
