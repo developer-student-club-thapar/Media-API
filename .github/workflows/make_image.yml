@@ -14,7 +14,10 @@ jobs:
       uses: Kaven-Universe/github-action-current-date-time@v1.1.0
       with:
         format: "YYYY_MM_DD HH_mm_ss_SSS"
-    - uses: actions/checkout@v3    
+    - name: Start Build    
+      uses: actions/checkout@v3    
+      with:
+        ref: "main"
     - name: Login to Dockerhub
       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
     - name: Build the Docker Image
