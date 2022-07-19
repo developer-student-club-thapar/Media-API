@@ -17,12 +17,9 @@ jobs:
     - uses: actions/checkout@v3
     - name: Print time
       run: echo ${{ steps.time.outputs.time }}
-#     - name: Login to Dockerhub
-#       env:
-#         DOCKER_USER: ${{secrets.DOCKER_USER}}
-#         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}\
-#       run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
-#     - name: Build the Docker Image
-#       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/media-api:$(date +%s)
-#     - name: Push to Docker Hub
-#       run: docker push ${{secrets.DOCKER_USER}}/media-api:$(date +%Y-%m%-d%-%H)
+    - name: Login to Dockerhub
+      run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+    - name: Build the Docker Image
+      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/media-api:${{ steps.time.outputs.time }}
+    - name: Push to Docker Hub
+      run: docker push ${{secrets.DOCKER_USER}}/media-api:${{ steps.time.outputs.time }}
