@@ -1,0 +1,16 @@
+name: Redeploy using ansible
+
+on:
+  workflow_run:
+    workflows:
+      - "Make Image and push it to Docker Hub"
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Running
+      run: echo "Running"
