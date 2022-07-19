@@ -1,0 +1,21 @@
+name: Make Image and push it to Docker Hub
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login to Dockerhub
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}\
+      run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build the Docker Image
+      run: docker build . --file Dockerfile --tag media-api:$(date +%s)
+    - name: Push to Docker Hub
+      run: docker push $DOCKER_USER/media-api:$(date +%s)
