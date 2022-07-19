@@ -1,4 +1,4 @@
-name: Redeploy using ansible
+name: Deploy Media api to server
 
 on:
   workflow_run:
@@ -12,5 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Running
-      run: echo "Running"
+  # - name: Setup the ansible key
+  #   Setup the keys
+    - name: Run Ansible Playbook
+      run: ansible-playbook playbooks/redeploy.yml
