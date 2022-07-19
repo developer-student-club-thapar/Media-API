@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Set date as tag name
+      env:
+        DATE: $(date +%Y-%m-%d-%H-%M-%S)
+      run: echo $DATE  
     - name: Login to Dockerhub
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
