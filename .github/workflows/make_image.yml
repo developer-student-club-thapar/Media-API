@@ -16,7 +16,7 @@ jobs:
         format: "YYYY_MM_DD HH_mm_ss_SSS"
     - uses: actions/checkout@v3
     - name: Print time
-      run: echo ${{ steps.t1.outputs.time }}
+      run: echo ${{ steps.time.outputs.time }}
 #     - name: Login to Dockerhub
 #       env:
 #         DOCKER_USER: ${{secrets.DOCKER_USER}}
