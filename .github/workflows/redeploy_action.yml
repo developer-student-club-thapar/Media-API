@@ -1,0 +1,18 @@
+name: Deploy Media api to server
+
+on:
+  workflow_run:
+    workflows:
+      - "Make Image and push it to Docker Hub"
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+  # - name: Setup the ansible key
+  #   Setup the keys
+    - name: Run Ansible Playbook
+      run: ansible-playbook playbooks/redeploy.yml
